@@ -7,6 +7,7 @@
     <meta name="format-detection" content="telephone=no" />
     <meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1, user-scalable=no">
     <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="receiveCheck.css">
     <script src="./jquery-1.10.2.js"></script>
     <script src="./socketio.js"></script>
     <script src="./client_flowers.js"></script>
@@ -26,10 +27,10 @@
         	<div class="from-group">
         		<div class="label">手机号: </div>
         		<input type="text" id="phone_receive" placeholder="手机号">
+                <input type="text" id="code1" class="vcode_text" />
         	</div>
             <div class="btn-con">
                 <div id="vCode1" class="vcode"></div>
-                <input type="text" id="code1" class="vcode_text" />
             </div>
 
         	<div id="commit_receive" class="submit-btn" style="margin-top:0px;">确定</div>

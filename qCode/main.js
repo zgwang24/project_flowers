@@ -75,7 +75,8 @@ $(function () {
 					$("#receiver_receive").html(message[0].head);
 					$("#content_receive").html(message[0].content);
 					$("#sender_receive").html(message[0].name);
-					if(message.length > 0){
+					if(message.length > 1){
+						alert("查看列表中的祝福语，请通过浏览器打开！")
 						for(var i = 0; i < Math.min(message.length, 4); i++){
 							var time = new Date(message[i].date);
     						var date = time.getFullYear()+"."+(time.getMonth()+1)+"."+time.getDate();

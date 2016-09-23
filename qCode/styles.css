@@ -37,7 +37,7 @@
 }
 .from-group input {
 	height: 25px;
-	width: 75%;
+	/*width: 75%;*/
 	border: 1px solid #555;
 	border-radius: 2px;
 	padding: 0 5px;
@@ -116,7 +116,7 @@
 }
 .vcode_text {
 	height: 30px;
-	width: 56%;
+	/*width: 56%;*/
 	border: 1px solid #555;
 	border-radius: 2px;
 	padding: 0 5px;
