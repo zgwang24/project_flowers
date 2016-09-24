@@ -16,7 +16,7 @@ client['readWish'] = readWish;
 function connect(callback){ 
 	// ip and port, you should change the ip address by yourself.
 	// socket = io.connect("http://43.242.35.62:8123/flower"); 
-	socket = io.connect("http://115.28.94.141:8123/flower"); 
+	socket = io.connect("http://10.107.30.184:8123/flower"); 
 	
 	socket.on('connection',function(){
 		callback.connectCallback();

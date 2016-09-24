@@ -12,3 +12,15 @@
 .vcode {
 	margin: 0 5% !important;
 }
+
+/*#wishLists-tr .wishTd {
+	background-color: red;
+}*/
+
+#wishLists-tr .wishMessage {
+	cursor: pointer;
+}
+.hidehead,
+.hidename {
+	display: none !important;
+}

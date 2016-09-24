@@ -15,7 +15,10 @@
     <script src="./main.js"></script>
     <script type="text/javascript">
         function aclick(self){
-           document.getElementById("content_receive").innerText = self.innerText;
+           document.getElementById("content_receive").innerText = self.childNodes[1].innerText;
+           document.getElementById("receiver_receive").innerText = self.childNodes[2].innerText;
+           document.getElementById("sender_receive").innerText = self.childNodes[3].innerText;
+           console.log(self);
         }
     </script>
 
@@ -54,5 +57,16 @@
             <h3>递送大自然原本的气息</h3>
         </div>
     </div>
+    <script type="text/javascript">
+    $(document).ready(function() {
+        /*$('.wishMessage').click(function() {
+            alert($(this).text());
+            $('#content_receive').html($(this).text());
+        })*/
+    })
+        /*document.getElementsByClassName('.wishMessage').onclick = function(){
+            alert($(this).text());
+        }*/
+    </script>
 </body>
 </html>
