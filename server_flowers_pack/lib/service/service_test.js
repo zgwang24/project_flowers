@@ -1,0 +1,1 @@
+var Service=require("./service"),wish={head:"002",content:"hello 002, you are great, too.",name:"002",orderId:"1008602"},obj={setPhone:"002",phone:"002",wishes:[wish],flowerShop:"yuanqi"},callback=function(e,o){e?console.log(e):console.log(o)};Service.readWishBySetPhoneAndShop("002","yuanqi",callback);
