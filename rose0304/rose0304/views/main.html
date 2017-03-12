@@ -1,0 +1,577 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>RoseToMe</title>
+    <meta name="format-detection" content="telephone=no" />
+    <meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1, user-scalable=no">
+    <link rel="stylesheet" href="css/mui.css">
+    <link rel="stylesheet" href="css/mui.picker.css">
+    <link rel="stylesheet" href="css/mui.poppicker.css">
+    <script src="js/mui.min.js"></script>
+    <script src="js/mui.picker.js"></script>
+    <script src="js/mui.poppicker.js"></script>
+    <script src="js/vCode.js"></script>
+    <script src="javascripts/socketio.js"></script>
+    <script src="javascripts/client_flowers.js"></script>
+    <script src="js/mustache.min.js"></script>
+    <!-- <script src="./js/main.js"></script> -->
+    <style>
+    li,ul {
+      list-style: none;
+    }
+    table
+    {
+    border-collapse:collapse;
+    }
+
+    table, td, th
+    {
+    border:1px solid #ddd;
+    }
+    td{
+      text-overflow:ellipsis; 
+      white-space:nowrap; 
+      overflow:hidden;
+    }
+      .greeting-title {
+          height: 30px;
+          line-height: 30px;
+          width: 90%;
+          margin: 0px auto;
+          color: #fff;
+          font-size: 15px;
+          text-align: center;
+          font-weight: bold;
+          background-color: #555;
+      }
+      .greeting-content {
+          display: block;
+          width: 90%;
+          height: 200px;
+          margin: 0 auto;
+          font-size: 15px;
+          color: #555;
+          /* border: 1px solid #ccc; */
+          overflow-x: hidden;
+          overflow-y: auto;
+          background-color: #fff;
+          opacity: 0.85;
+      }
+      .receiver {
+    position: relative;
+    margin: 0px 10px;
+    text-align: left;
+    color: #555;
+    height: 35px;
+    line-height: 40px;
+    padding-left: 10px;
+}
+
+.receiver input {
+    margin: 0px;
+    width: 75%;
+    font-size: 16px;
+    height: 100%;
+    line-height: 21px;
+    border: 0px;
+    /*outline: mediumaquamarine;*/
+}
+.greeting-content textarea {
+    position: relative;
+    width: 99%;
+    height: 122px;
+    font-size: 16px;
+    border: 0px;
+    padding: 0px 10px;
+    outline: mediumaquamarine;
+    margin-bottom: 0px;
+}
+.sender {
+    position: relative;
+    margin: 0px 10px;
+    text-align: right;
+    color: #555;
+    height: 35px;
+    line-height: 40px;
+}
+
+.sender input {
+    font-size: 16px;
+    height: 100%;
+    margin: 0px;
+    line-height: 21px;
+    width: 30%;
+    border: 0px;
+    outline: mediumaquamarine;
+}
+.btn-con {
+    width: 90%;
+    height: 32px;
+    /* position: relative; */
+    margin: 15px auto;
+}
+.vcode {
+    width: 35%;
+    height: 30px;
+    border: 1px solid #ccc;
+    display: inline-block;
+    float: left;
+    /* margin: 0 12%; */
+}
+.vcode_text {
+    font-size: 16px;
+    width: 35%;
+    float: right;
+    height: 30px;
+    border: 1px solid #ccc;
+    border-radius: 2px;
+    padding: 0 1px;
+    outline: mediumaquamarine;
+}
+.cancel {
+    width: 20%;
+    height: 30px;
+    line-height: 30px;
+    color: #fff;
+    font-size: 16px;
+    background-color: #555;
+    text-align: center;
+    border-radius: 2px;
+    float: left;
+    margin-right: 10%;
+}
+.save {
+    width: 20%;
+    height: 30px;
+    line-height: 30px;
+    color: #fff;
+    font-size: 16px;
+    background-color: #555;
+    text-align: center;
+    border-radius: 2px;
+    float: left;
+    margin-right: 5%;
+}
+.bg {
+  /*background: url(./img/bg2.jpg);*/
+  /*background: url(./img/background.jpg);*/
+
+  /*background-size: 100%;*/
+
+}
+.infoArea {
+  width: 90%;
+  margin: 0 auto;
+}
+.tableContainer {
+  background-color:rgba(255, 255, 255,0.7);
+  text-align: center;
+  font-size: 14px;
+  margin-bottom: 30px;
+}
+.tableBody {
+  font-size: 12px;
+}
+
+.footer {
+    width: 90%;
+    margin: 120px auto 0px auto;
+    white-space: normal;
+    text-align: center;
+    font-size: 12px;
+    background-color: rgba(255,255,255,0.9);
+}
+.mui-input-row label{
+  line-height: 1.5;
+}
+</style>
+ </head>
+<body class="bg">
+  <div style="margin-top:10px;"> 
+    <div class="greeting-title">祝福语</div>
+    <div class="greeting-content">
+        <div class="receiver">
+            收礼人：
+            <input type="text" id="receiver" autofocus="autofocus">
+        </div>
+        <textarea name="greetings" id="content" cols="40" rows="10"></textarea>
+        <div class="sender">
+            送礼人：
+            <input type="text" id="sender">
+        </div>
+        
+    </div>
+    <div class="infoArea">
+      <form class="mui-input-group">
+        <div class="mui-input-row" style="height: 35px;">
+            <label style="font-size: 13px;">订单平台：</label>
+            <input type="text" class="mui-input-clear" placeholder="请选择订单平台" id="platformInput" onclick="choose()">
+        </div>
+        <div class="mui-input-row" style="height: 35px;">
+            <label style="font-size: 13px;">订单号：</label>
+            <input type="text" class="mui-input-clear" placeholder="请输入订单号" id="orderInput">
+        </div>
+        <div class="mui-input-row" style="height: 35px;">
+            <label style="font-size: 12px;">查看留言手机号：</label>
+            <input type="text" class="mui-input-clear" placeholder="请输入手机号" id="telInput">
+        </div>      
+      </form>
+    </div>
+    <div class="btn-con">
+        <div id="vCode1" class="vcode"></div>
+        <input type="text" id="code1" class="vcode_text" style="width: 35%;height: 35px;margin-bottom: 0px" />
+    </div>
+    <div class="btn-con">
+        <div class="save" id="save" onclick="save()">保存</div>
+        <div class="cancel" id="cancel" onclick="back()">取消</div>
+        <div class="save" id="editOrder" onclick="editOrder()" style="color: #999;" disabled='true'>编辑</div>
+        <div class="cancel" id="deleteOrder" onclick="deleteOrder()" style="color: #999; margin-right: 0px;float: right;" disabled='true'>删除</div>     
+    </div>
+    <div class="btn-con">
+      <div class="mui-input-row mui-search">
+        <input type="search" class="mui-input-clear" style="background-color:rgba(255, 255, 255,0.85);border: 1px solid #ccc;" placeholder="点击可搜索历史留言" onkeydown="handleCommentInputKeyDown(event)" id="search">
+      </div>
+    </div>
+     <table class="mui-table tableContainer" id="AreaContainer">
+        <thead>
+          <tr>
+            <th>创建时间</th>
+            <th>查看手机号</th>
+            <th>订单号</th>
+            <th>署名</th>
+          </tr>
+        </thead>
+        <tbody class="tableBody" id="commentArea">
+        </tbody>
+      </table>
+      <div class="footer">
+      <a href="tel:4001-510-521"><p style="margin: 0px"><span class="mui-icon mui-icon-phone" style="font-size: 20px"></span>4001-510-521</p></a>
+      <p style="margin: 0px">甄选世界顶级玫瑰，只为最深爱意表达</p>
+    </div>
+   </div> 
+</body>
+<script type="text/javascript">
+  var container1 = document.getElementById("vCode1");
+  var code1 = new vCode(container1);
+  function back() {
+    if (document.getElementById('receiver').value == '') {
+      window.location.href = '/';
+    } else {
+      location.reload();
+    }
+    
+  }
+  function save() {
+    if (document.getElementById('receiver').value == '') {
+      mui.toast('请输入收礼人名称！');
+    } else if (document.getElementById('content').value == '') {
+      mui.toast('请输入您的祝福语！');
+    } else if (document.getElementById('sender').value == '') {
+      mui.toast('请输入送礼人名称！');
+    } else if ( !code1.verify(document.getElementById("code1").value)) {
+      mui.toast('请输入正确的验证码！');
+    } else {
+      console.log(document.getElementById('orderInput').value);
+      getOrderId(document.getElementById('orderInput').value + document.getElementById('telInput').value, new function() {
+        this.successCallback = function(message) {
+          if (message == -1) {
+            Wish();
+          } else {
+            // mui.toast('该订单号已存在，请重新输入！');
+            update_wish();
+          }
+        };
+        this.errorCallback = function(message) {
+          console.log("failed" + message);
+        };
+        this.connectCallback = function(message) {
+          console.log('connectSucceed' + message);
+        };
+        this.disconnectCallback = function(message) {
+          console.log('disconnect' + message);
+        };
+        this.socketErrorCallback = function(message) {
+          console.log('socketError' + message);
+        };
+        this.newMessageCallback = function(message) {
+          console.log('newMessages' + message);
+        };
+      });
+      // Wish()
+    }
+  }
+  function update_wish() {
+      var loginPhone = localStorage.getItem('loginPhone');
+      var phone = document.getElementById('telInput').value;
+      var orderId = document.getElementById('orderInput').value;
+      var platform =  document.getElementById('platformInput').value;
+      var receiver = document.getElementById('receiver').value;
+      var content = document.getElementById('content').value;
+      var sender = document.getElementById('sender').value;
+      updateWish(platform, orderId, phone, loginPhone, receiver, content, sender, 'RoseToMe', new function() {
+        this.successCallback = function(message) {
+          window.location.href = '/success';
+        };
+        this.errorCallback = function(message) {
+          console.log("failed" + message);
+        };
+        this.connectCallback = function(message) {
+          console.log('connectSucceed' + message);
+        };
+        this.disconnectCallback = function(message) {
+          console.log('disconnect' + message);
+        };
+        this.socketErrorCallback = function(message) {
+          console.log('socketError' + message);
+        };
+        this.newMessageCallback = function(message) {
+          console.log('newMessages' + message);
+        };
+      });
+  }
+  function Wish() {
+    var loginPhone = localStorage.getItem('loginPhone');
+      var phone = document.getElementById('telInput').value;
+      var orderId = document.getElementById('orderInput').value;
+      var platform =  document.getElementById('platformInput').value;
+      var receiver = document.getElementById('receiver').value;
+      var content = document.getElementById('content').value;
+      var sender = document.getElementById('sender').value;
+      createWish(platform, orderId, phone, loginPhone, receiver, content, sender, 'RoseToMe', new function() {
+        this.successCallback = function(message) {
+          window.location.href = '/success';
+        };
+        this.errorCallback = function(message) {
+          console.log("failed" + message);
+        };
+        this.connectCallback = function(message) {
+          console.log('connectSucceed' + message);
+        };
+        this.disconnectCallback = function(message) {
+          console.log('disconnect' + message);
+        };
+        this.socketErrorCallback = function(message) {
+          console.log('socketError' + message);
+        };
+        this.newMessageCallback = function(message) {
+          console.log('newMessages' + message);
+        };
+      });
+  }
+</script>
+<script type="text/javascript">
+  var picker = new mui.PopPicker();
+  picker.setData([{
+      value: "first",
+      text: "RoseToMe官网"
+  }, {
+      value: "second",
+      text: "微商城"
+  }, {
+      value: "third",
+      text: "淘宝"
+  }, {
+      value: "fourth",
+      text: "京东商城"
+  }, {
+      value: "fifth",
+      text: "京东到家"
+  },{
+      value: "sixth",
+      text: "百度外卖"
+  },{
+      value: "seventh",
+      text: "美团外卖"
+  },{
+      value: "eighth",
+      text: "其他"
+  },])
+  //picker.pickers[0].setSelectedIndex(4, 2000);
+  // picker.pickers[0].setSelectedValue('second', 2000);
+  function choose() {
+    picker.show(function(SelectedItem) {
+      // console.log(SelectedItem);
+      document.getElementById('platformInput').value = SelectedItem[0].text;
+      // document.getElementById('platformInput').disabled =true;
+      // console.log(SelectedItem[0].text);
+    })
+  }
+</script>
+<script type="text/javascript">
+var temp;
+
+  function editOrder() {
+
+    document.getElementById('receiver').disabled = false;
+    document.getElementById('receiver').focus();
+    document.getElementById('content').disabled = false;
+    document.getElementById('sender').disabled = false;
+    document.getElementById('platformInput').disabled = false;
+    document.getElementById('orderInput').disabled = false;
+    document.getElementById('telInput').disabled = false;
+  }
+  function deleteOrder() {
+    console.log('delete');
+    deleteWish(localStorage.getItem('loginPhone'), document.getElementById('telInput').value, "RoseToMe", document.getElementById('orderInput').value, new function(){
+        this.successCallback = function(message) {
+          console.log('delete1');
+          window.location.href = "/main";    
+        };
+        this.errorCallback = function(message) {
+          console.log("failed" + message);
+        };
+        this.connectCallback = function(message) {
+          console.log('connectSucceed' + message);
+        };
+        this.disconnectCallback = function(message) {
+          console.log('disconnect' + message);
+        };
+        this.socketErrorCallback = function(message) {
+          console.log('socketError' + message);
+        };
+        this.newMessageCallback = function(message){
+          console.log('newMessages' + JSON.stringify(message));
+        };
+      });
+  }
+  function goto(i) {
+    // alert(JSON.stringify(i));
+    // console.log(JSON.stringify(this));
+    // console.log(i);
+    // console.log(temp[i]);
+    document.getElementById('receiver').value = temp[i].head;
+    document.getElementById('content').value = temp[i].content;
+    document.getElementById('sender').value = temp[i].name;
+    document.getElementById('platformInput').value = temp[i].plateform;
+    document.getElementById('orderInput').value = temp[i].orderId;
+    document.getElementById('telInput').value = temp[i].getPhone;
+
+    document.getElementById('receiver').disabled = true;
+    document.getElementById('content').disabled = true;
+    document.getElementById('sender').disabled = true;
+    document.getElementById('platformInput').disabled = true;
+    document.getElementById('orderInput').disabled = true;
+    document.getElementById('telInput').disabled = true;
+
+    document.getElementById('editOrder').disabled = false;
+    document.getElementById('deleteOrder').disabled = false;
+    document.getElementById('editOrder').style.color = '#fff';
+    document.getElementById('deleteOrder').style.color = '#fff';
+  }
+  var templateComment = ["<tr onclick=\"goto({{order}})\">",
+" <td>{{date}}</td>",
+" <td>{{getPhone}}</td>",
+" <td>{{orderId}}</td>",
+" <td>{{name}}</td>",
+"</tr>"].join("");
+
+  function handleCommentInputKeyDown(e) {
+    // console.log(e.keyCode);
+    if (e.keyCode === 13) {
+      console.log(document.getElementById('search').value);
+      handleSearch(document.getElementById('search').value);
+    }
+  }
+  
+  function handleSearch(data) {
+    var fragment = '';
+    // console.log("=>>====",data);
+    if (data !== "") {
+      // console.log("=>>",data);
+      // readWish("18810802046", "yuanqi", new function(){
+      readWish(data, "RoseToMe", new function(){ 
+        this.successCallback = function(message) {
+          temp = message;
+          // localStorage.setItem('lmj',message);
+          // console.log("succeed", message);
+          // var allData = JSON.stringify(message);
+          // console.log('----->',message.length);
+          // console.log(message[0].head);
+          // console.log(fragment);
+          for (var i = 0, length = message.length; i < length; i++) {
+            fragment += Mustache.render(templateComment, message[i]);
+            // console.log(fragment);
+            // document.getElementById("commentArea").innerHTML += fragment;
+          }
+          document.getElementById("commentArea").innerHTML = fragment;
+        };
+        this.errorCallback = function(message) {
+          console.log("failed" + message);
+        };
+        this.connectCallback = function(message) {
+          console.log('connectSucceed' + message);
+        };
+        this.disconnectCallback = function(message) {
+          console.log('disconnect' + message);
+        };
+        this.socketErrorCallback = function(message) {
+          console.log('socketError' + message);
+        };
+        this.newMessageCallback = function(message){
+          console.log('newMessages' + JSON.stringify(message));
+        };
+      });
+    } else {
+      readWishBySetPhone(localStorage.getItem('loginPhone'), "RoseToMe", new function(){
+        this.successCallback = function(message) {
+          temp = message;
+          for (var i = 0, length = message.length; i < length; i++) {
+            fragment += Mustache.render(templateComment, message[i]);
+            // console.log(fragment);
+            // document.getElementById("commentArea").innerHTML += fragment;
+          }
+          document.getElementById("commentArea").innerHTML = fragment;       
+        };
+        this.errorCallback = function(message) {
+          console.log("failed" + message);
+        };
+        this.connectCallback = function(message) {
+          console.log('connectSucceed' + message);
+        };
+        this.disconnectCallback = function(message) {
+          console.log('disconnect' + message);
+        };
+        this.socketErrorCallback = function(message) {
+          console.log('socketError' + message);
+        };
+        this.newMessageCallback = function(message){
+          console.log('newMessages' + JSON.stringify(message));
+        };
+      });
+    }
+  }
+</script>
+<script type="text/javascript">
+  (function getDefaultVal() {
+    var fragment = '';
+    readWishBySetPhone(localStorage.getItem('loginPhone'), "RoseToMe", new function(){
+        this.successCallback = function(message) {
+          temp = message;
+          for (var i = 0, length = message.length; i < length; i++) {
+            fragment += Mustache.render(templateComment, message[i]);
+            // console.log(fragment);
+            // document.getElementById("commentArea").innerHTML += fragment;
+          }
+          document.getElementById("commentArea").innerHTML = fragment;       
+        };
+        this.errorCallback = function(message) {
+          console.log("failed" + message);
+        };
+        this.connectCallback = function(message) {
+          console.log('connectSucceed' + message);
+        };
+        this.disconnectCallback = function(message) {
+          console.log('disconnect' + message);
+        };
+        this.socketErrorCallback = function(message) {
+          console.log('socketError' + message);
+        };
+        this.newMessageCallback = function(message){
+          console.log('newMessages' + JSON.stringify(message));
+        };
+      });
+  })()
+</script>
+</html>

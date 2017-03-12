@@ -1,0 +1,15 @@
+{ "phone" : "1881802046", "setPhone" : "18500132617", "flowerShop" : "RoseToMe", "_id" : ObjectId("58ba1e2a9a51b516f27a6be2"), "wishes" : [   {   "plateform" : "微商城",  "orderId" : "9876541233",   "head" : "wzg",   "content" : "QQ邮箱是目前使用人数最多的电子邮箱,依托QQ的成功,QQ邮箱也成为目前使用人数最多的电子邮箱,QQ号加上@qq.com的邮箱域名,简单而且非常的好记。",   "name" : "lmj",   "getPhone" : "1881802046",  "order" : "0",  "_id" : ObjectId("58ba1e2a9a51b516f27a6be3"),   "date" : ISODate("2017-03-04T01:53:46.348Z") } ], "__v" : 0 }
+{ "phone" : "1881802046", 
+  "setPhone" : "18500132617", 
+  "flowerShop" : "RoseToMe", 
+  "_id" : ObjectId("58ba1e2a9a51b516f27a6be2"), 
+  "wishes" : [   {   "plateform" : "微商城",  
+                     "orderId" : "9876541233",   
+                     "head" : "wzg",   
+                     "content" : "QQ邮箱是目前使用人数最多的电子邮箱,依托QQ的成功,QQ邮箱也成为目前使用人数最多的电子邮箱,QQ号加上@qq.com的邮箱域名,简单而且非常的好记。",   
+                     "name" : "lmj",   
+                     "getPhone" : "1881802046",  
+                     "order" : "0",  
+                     "_id" : ObjectId("58ba1e2a9a51b516f27a6be3"),   
+                     "date" : ISODate("2017-03-04T01:53:46.348Z") } ],
+  "__v" : 0 }
